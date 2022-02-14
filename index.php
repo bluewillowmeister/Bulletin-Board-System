@@ -6,7 +6,19 @@
 <?php require_once("./function/display.php"); // 投稿データ表示用関数読み込み?>
 
 <?php
-    my_session_start();
+    if (is_session_started() === false) 
+    {
+        // セッションは有効で、開始していないとき
+        init();
+        my_session_start();
+    }
+
+    //クロスサイトリクエストフォージェリ（CSRF）対策
+    $_SESSION["token"] = base64_encode(openssl_random_pseudo_bytes(32));
+
+    //クリックジャッキング対策
+    header("X-FRAME-OPTIONS: SAMEORIGIN");
+    
     if (!isset($_SESSION["post_mode"]))
     {
         $_SESSION["post_mode"] = PostMode::SIGNUP;
@@ -64,12 +76,12 @@
 
         <?php if ( $_SESSION["post_mode"] === PostMode::SIGNUP ): ?>
             
-            <!-- 投稿データ更新（追加・編集）用フォーム -->
+            <!-- 新規投稿送信用フォーム -->
             <form method="POST" action="./function/insert.php">
             
                 <table>
 
-                    <!-- 新規投稿送信用フォーム -->
+                    
                     <div id="signup">
                         <tr>
                             <th>名前：</th>
@@ -91,17 +103,18 @@
                         </tr>
                         <tr>
                             <td>
+                                <input name="token" type="hidden" value="<?php if (check_value($_SESSION["token"])) echo $_SESSION["token"]; ?>">
                                 <input type="submit" value="送信">
                                 <input type="button" value="クリア" onclick="clearForms('post_data')" />  
                             </td>
                         </tr>
                     </div>
-                    <!-- /新規投稿用フォーム -->
+                    
                     
                 </table>
                 
             </form>
-            <!-- /投稿データ更新（追加・編集）用フォーム -->
+            <!-- /新規投稿送信用フォーム -->
 
             <!-- 削除ID送信用フォーム -->
             <form method="POST" action="./function/delete.php">
@@ -117,6 +130,7 @@
                     </tr>
                     <tr>
                         <td>
+                            <input name="token" type="hidden" value="<?php if (check_value($_SESSION["token"])) echo $_SESSION["token"]; ?>">
                             <input type="submit" value="削除">
                         </td>
                     </tr>
@@ -140,6 +154,7 @@
                         </tr>
                         <tr>
                             <td>
+                                <input name="token" type="hidden" value="<?php if (check_value($_SESSION["token"])) echo $_SESSION["token"]; ?>">
                                 <input type="submit" value="編集">
                             </td>
                         </tr>
@@ -185,6 +200,8 @@
                             if (check_value($_SESSION["edit_id"]))
                                 echo $_SESSION["edit_id"];
                         ?>">
+                        <input name="token" type="hidden" value="<?php if (check_value($_SESSION["token"])) echo $_SESSION["token"]; ?>">
+
                         <tr>
                             <td>
                                 <input type="submit" value="送信" formaction="./function/update.php">
@@ -207,7 +224,7 @@
         <hr>
         
         
-        <h2>【投稿内容】</h2>
+        <h2>【投稿一覧】</h2>
         <?php  
         
             display();
