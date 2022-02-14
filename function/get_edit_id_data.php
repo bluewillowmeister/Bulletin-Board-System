@@ -13,6 +13,12 @@
         // セッションスタート
         my_session_start();
 
+        
+        // クロスサイトリクエストフォージェリ対策
+        if ($_POST["token"] !== $_SESSION["token"])
+            return;
+
+
         // 編集ID送信用フォーム入力判定フラグ
         $input_edit_id_forms_flag = ( check_value($_POST["edit_id"]) && 
                                     check_value($_POST["edit_password"]) );
