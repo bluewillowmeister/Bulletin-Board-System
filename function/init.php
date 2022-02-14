@@ -15,6 +15,6 @@
         session_write_close();
     }
     
-    init();
+    
 ?>
 

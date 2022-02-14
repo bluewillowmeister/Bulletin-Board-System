@@ -9,9 +9,12 @@
 
 
     // XSS攻撃対策用エスケープ関数
-    function h($s) 
+    // エスケープされたテキストを返す
+    function h($text) 
     {
-        return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
+        // $text: エスケープしたいテキスト
+
+        return htmlspecialchars($text, ENT_QUOTES, "UTF-8");
     }
 
 
@@ -21,36 +24,34 @@
         $alert = "<script type='text/javascript'>alert('". $str . "');</script>";
         echo $alert;
     }   
-
-    function check_value(
-        &$value, 
-        $exclude_zero=true,
-        $alert_flag=false)
+    
+    // formに入力された値が空かどうか判別する関数
+    // 空のとき: false, 空でないとき: trueを返す
+    function check_value(&$value, $exclude_zero=true)
     {
+        // &$value, フォームに入力された値を格納している変数($_POST["name"]など)のポインタ(意味：本体)
+        // $exclude_zero: デフォルト値=true, オプション変数, empty関数が空と認識してしまうゼロ(0 や "0")を除外するかどうか
+
+        // そもそも変数($_POST["name"]など)が宣言されているかどうかチェック
         if (!isset($value))
         {
-            if ($alert_flag)
-                alert("Error: isset() === false");
             return false;
         }
         
+        // 変数の値が空かどうかチェック
         if (empty($value))
         {
+            // $exclude_zero=trueのとき
             if ($exclude_zero)
             {
+                // 「!==」を使って厳密に比較し、ゼロ(0 や "0")でないかチェック
                 if ( ($value !== "0") && ($value !== 0) )
-                {
-                    if ($alert_flag)
-                        alert("Error: (exor 0 && empty()) === false");
-                    
+                {                    
                     return false;
                 }
             }
             else
             {
-                if ($alert_flag)
-                    alert("Error: empty() === false");
-            
                 return false; 
             }
             
@@ -58,6 +59,47 @@
 
         return true;
     }
+
+    // function check_value(
+    //     &$value, 
+    //     $exclude_zero=true,
+    //     $alert_flag=false)
+    // {
+    //     // &$value, フォームに入力された値を格納している変数($_POST["name"]など)のポインタ（意味：本体）
+    //     // $exclude_zero: オプション、
+    //     // 
+
+    //     if (!isset($value))
+    //     {
+    //         if ($alert_flag)
+    //             alert("Error: isset() === false");
+    //         return false;
+    //     }
+        
+    //     if (empty($value))
+    //     {
+    //         if ($exclude_zero)
+    //         {
+    //             if ( ($value !== "0") && ($value !== 0) )
+    //             {
+    //                 if ($alert_flag)
+    //                     alert("Error: (exor 0 && empty()) === false");
+                    
+    //                 return false;
+    //             }
+    //         }
+    //         else
+    //         {
+    //             if ($alert_flag)
+    //                 alert("Error: empty() === false");
+            
+    //             return false; 
+    //         }
+            
+    //     }
+
+    //     return true;
+    // }
 
     function change_mode(
         &$poster_name,

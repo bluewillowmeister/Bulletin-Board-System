@@ -5,15 +5,17 @@
     require_once( __DIR__ . "/../config/Config.php");
     require_once( __DIR__ . "/../manager/TableDataManager.php");
     require_once( __DIR__ . "/utility.php");
-
-    // 再読み込みあり
-    require( __DIR__ . "/init.php"); // 初期化処理実行
+    require_once( __DIR__ . "/init.php"); // 初期化処理実行
 
 
     function insert()
     {
         // セッションスタート
         my_session_start();
+
+        // クロスサイトリクエストフォージェリ対策
+        if ($_POST["token"] !== $_SESSION["token"])
+            return;
 
         // 新規投稿フォーム入力判定フラグ
         $input_signup_forms_flag = ( check_value($_POST["poster_name"]) && 
@@ -46,7 +48,7 @@
 
             // 新規投稿データ挿入
             $post_data_manager->insert($new_params_dict);
-            
+            init();
             
         }
         

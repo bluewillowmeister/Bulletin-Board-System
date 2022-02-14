@@ -5,15 +5,16 @@
     require_once( __DIR__ . "/../config/Config.php");
     require_once( __DIR__ . "/../manager/TableDataManager.php");
     require_once( __DIR__ . "/utility.php");
-
-    // 再読み込みあり
-    require( __DIR__ . "/init.php"); // 初期化処理実行
-
+    require_once( __DIR__ . "/init.php"); 
 
     function update()
     {
         // セッションスタート
         my_session_start();
+
+        // クロスサイトリクエストフォージェリ対策
+        if ($_POST["token"] !== $_SESSION["token"])
+            return;
 
         // 編集済み投稿フォーム入力判定フラグ
         $input_edit_forms_flag = ( check_value($_POST["edit_poster_name"]) && 
