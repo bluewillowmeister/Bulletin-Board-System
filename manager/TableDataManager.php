@@ -167,12 +167,15 @@
                 // 更新処理実行
                 $sql -> execute();
                 
-                // 行数が0のとき、primary key をふり直す
-                if ($this->count_row() === 0)
+                // primary key をふり直す
+                $num_of_rows = $this->count_row();
+                if ($num_of_rows >= 0)
                 {   
                     // ふり直しの構文定義
-                    $reset_primary_key_stmt = sprintf("SET @i := 0; UPDATE %s SET %s = (@i := @i +1); ALTER TABLE %s AUTO_INCREMENT = 1", 
-                        $this->table_name, $id_name, $this->table_name);
+                    $reset_primary_key_stmt = sprintf("SET @i := %s; UPDATE %s SET %s = (@i := @i +1); ALTER TABLE %s AUTO_INCREMENT = 1", 
+                        0, $this->table_name, $id_name, $this->table_name);
+                    // $reset_primary_key_stmt = sprintf("ALTER TABLE %s AUTO_INCREMENT = %s", 
+                    //     $this->table_name, 1);
                     $sql = $this->pdo()->query($reset_primary_key_stmt);
                 }   
                     
