@@ -20,9 +20,7 @@
 
 
         // 編集ID送信用フォーム入力判定フラグ
-        $input_edit_id_forms_flag = ( check_value($_POST["edit_id"]) && 
-                                    check_value($_POST["edit_password"]) );
-
+        $input_edit_id_forms_flag = check_values($_POST["edit_id"], $_POST["edit_password"]);
         
 
         if ($input_edit_id_forms_flag)

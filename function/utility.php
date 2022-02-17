@@ -60,6 +60,51 @@
         return true;
     }
 
+
+    // formに入力された値が空かどうか判別する関数
+    // 空のとき: false, 空でないとき: trueを返す
+    // 可変長引数
+    function check_values(...$values)
+    {
+        // &$values, フォームに入力された値を格納している配列($_POST["name"]など)
+
+        // empty関数が空と認識してしまうゼロ(0 や "0")を除外するかどうか
+        // 可変長引数とデフォルト引数が併用できないため、引数の配列末尾で判断
+        // inputフォームにはboolean型の値を入力できないため問題なし
+        if ( (end($values) === true) || (end($values) === false) )
+        {
+            $exclude_zero = end($values);
+            array_pop($values);
+        }
+        else
+            $exclude_zero = true; // デフォルト値
+
+        // 入力された引数の数だけループ
+        foreach ($values as $value)
+        {
+            // そもそも変数($_POST["name"]など)が宣言されているかどうかチェック
+            if (!isset($value))
+                return false;
+            
+            // 変数の値が空かどうかチェック
+            if (empty($value))
+            {
+                // $exclude_zero=trueのとき
+                if ($exclude_zero)
+                {
+                    // 「!==」を使って厳密に比較し、ゼロ(0 や "0")でないかチェック
+                    if ( ($value !== "0") && ($value !== 0) )                  
+                        return false;
+                }
+                else
+                    return false; 
+                
+            }
+        }
+        return true;
+    }
+
+
     // function check_value(
     //     &$value, 
     //     $exclude_zero=true,

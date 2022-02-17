@@ -18,9 +18,7 @@
             return;
 
         // 新規投稿フォーム入力判定フラグ
-        $input_signup_forms_flag = ( check_value($_POST["poster_name"]) && 
-                                    check_value($_POST["post_comment"]) &&
-                                    check_value($_POST["signup_password"]) );
+        $input_signup_forms_flag = check_values($_POST["poster_name"], $_POST["post_comment"], $_POST["signup_password"]);
 
         
 

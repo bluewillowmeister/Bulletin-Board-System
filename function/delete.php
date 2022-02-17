@@ -18,8 +18,7 @@
             return;
 
         // 削除ID送信用フォーム入力判定フラグ
-        $input_delete_id_forms_flag = ( check_value($_POST["delete_id"]) && 
-                                    check_value($_POST["delete_password"]) );
+        $input_delete_id_forms_flag = check_values($_POST["delete_id"], $_POST["delete_password"]);
 
         
 

@@ -17,10 +17,8 @@
             return;
 
         // 編集済み投稿フォーム入力判定フラグ
-        $input_edit_forms_flag = ( check_value($_POST["edit_poster_name"]) && 
-                                    check_value($_POST["edit_post_comment"]) &&
-                                    check_value($_POST["signup_password"]) &&
-                                    check_value($_POST["edit_id"]) );
+        $input_edit_forms_flag = check_values($_POST["edit_poster_name"], $_POST["edit_post_comment"], $_POST["signup_password"], $_POST["edit_id"]); 
+
 
         
 
