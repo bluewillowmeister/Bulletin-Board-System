@@ -64,7 +64,7 @@
     // formに入力された値が空かどうか判別する関数
     // 空のとき: false, 空でないとき: trueを返す
     // 可変長引数
-    function check_values(...$values)
+    function check_values(&...$values)
     {
         // &$values, フォームに入力された値を格納している配列($_POST["name"]など)
 
